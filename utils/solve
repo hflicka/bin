@@ -1,0 +1,6 @@
+#!/bin/sh
+bc -l << EOF
+scale=4
+$@
+quit
+EOF
