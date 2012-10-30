@@ -1,0 +1,59 @@
+#!/bin/sh
+
+cd /tmp
+wget http://dl.google.com/android/android-sdk_r20.0.3-linux.tgz
+tar -xzf android-sdk_r20.0.3-linux.tgz
+cd android-sdk-linux
+yes "" | tools/android update sdk --no-ui
+yes "" | tools/android create avd -n distcc -t "android-14" -c 1000M
+
+cd ..
+wget http://download.cyanogenmod.com/get/jenkins/4627/cm-9.0.0-RC2-galaxys2.zip
+unzip cm-9.0.0-RC2-galaxys2.zip system/xbin/su -d android-sdk-linux/
+unzip cm-9.0.0-RC2-galaxys2.zip system/app/Superuser.apk -d android-sdk-linux/
+
+wget http://yaffs2utils.googlecode.com/files/latest.tar.gz
+cd latest
+make
+cd ..
+
+cd android-sdk-linux
+tools/emulator -no-window -avd distcc &
+sleep 20
+platform-tools/adb kill-server
+platform-tools/adb -e shell mount -o rw,remount -t yaffs2 /dev/block/mtdblock0
+platform-tools/adb -e push system/xbin/su /system/xbin/su
+platform-tools/adb -e shell chmod 06755 /system
+platform-tools/adb -e shell chmod 06755 /system/xbin/su
+platform-tools/adb -e install system/app/Superuser.apk
+
+wget http://benno.id.au/android/busybox
+platform-tools/adb -e push busybox /system/xbin/busybox
+platform-tools/adb -e shell chmod 755 /system/xbin/busybox
+
+mkdir -p local
+cd ..
+wget ftp://ftp.gnu.org/pub/gnu/autoconf/autoconf-2.64.tar.bz2
+tar -xjf autoconf-2.64.tar.bz2
+cd autoconf-2.64
+./configure --prefix=/tmp/local
+make && make install
+cd ..
+
+wget ftp://ftp.gnu.org/pub/gnu/automake/automake-1.11.2.tar.bz2
+tar -xjf automake-1.11.2.tar.bz2 
+cd automake-1.11.2
+./configure --prefix=/tmp/local
+make && make install
+cd ..
+
+wget ftp://ftp.gnu.org/pub/gnu/libtool/libtool-2.4.2.tar.gz
+tar -xzf libtool-2.4.2.tar.gz
+cd libtool-2.4.2
+./configure --prefix=/tmp/local
+make && make install
+cd ..
+
+export PATH=/tmp/local/bin:$PATH
+
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+export LANG=de_DE.utf8
+export LC_ALL=de_DE
+export LOCALE=de_DE
+
+
