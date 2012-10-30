@@ -1,0 +1,10 @@
+#!/bin/bash
+total=0
+while (( "$#" )); do
+	num=$(pdfinfo -meta "$1" | grep -ia Pages | grep -E -o '[0-9]+')
+	let total=total+num
+	echo "$1": $num
+	shift
+done
+echo $total
+
