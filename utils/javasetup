@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#javahomelist=`cat $HOME/java_home  | grep -v '^#' | grep -v '^$'`
+javahomelist="/usr/lib/jvm/jre-1.6.0-sun
+/usr/lib/jvm/java-6-sun"
+for JAVA_HOME in $javahomelist ; do
+#	echo -n "  testing ${JAVA_HOME}..."
+	if [ -x "${JAVA_HOME}/bin/java" ]; then
+		export JAVA_HOME
+#		echo "found"
+		break
+#	else
+#		echo "not found"
+	fi
+done
+

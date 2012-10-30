@@ -1,0 +1,4 @@
+#!/bin/bash
+MYDIR=$(dirname $0)
+java -jar "$MYDIR/jtidy-r938.jar" $*
+

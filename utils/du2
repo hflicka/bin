@@ -1,0 +1,2 @@
+du -sbc --exclude=OldFiles .[!.]* * | sort -n
+
