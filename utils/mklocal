@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p --mode=700 /tmp/local
+
